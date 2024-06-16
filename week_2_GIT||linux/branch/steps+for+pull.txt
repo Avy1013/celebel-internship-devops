@@ -1,0 +1,6 @@
+Go to compare and pull request 
+and then create a pull request 
+then add a title and description
+see if there is any merge conflict
+if not any merge conflict 
+click on merge pull
