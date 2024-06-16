@@ -1,0 +1,69 @@
+All written by ME // Vaibhav Gupta also you can check my linkedin post regarding git
+https://www.linkedin.com/posts/vaibhav-gupta-20954222b_git-github-activity-7194791908735426561-1a4_?utm_source=share&utm_medium=member_desktop
+
+
+
+Undoing Changes---
+Case 1: staged changes
+git reset <- file name >
+git reset
+Case 2: commited changes (for one commit)
+git reset HEAD~1
+Git log // for seeing commits
+Case 3: commited changes (for many commits)
+git reset <- commit hash >
+git reset --hard <- commit hash
+		○ when using command git reset --hard <hash>
+        make sure u are absolutely sure as it will be permanent
+
+
+
+Git pull---
+Git pull-- for getting from remote repo(git fetch and git merge)
+Git pull --rebase as u know the work of rebase is that is too make the history in same line 
+incase u want more control
+	• git fetch // (to get the latest remote changes)
+git rebase origin/<branch_name>
+
+
+
+
+what I have learned about getting a new connection in git hub in different os
+	• Mac os
+		○ when first time you config the git hub in mac os it simply ask for password and store in key access app of the mac os
+		○ and when next time you use git push it uses that to authenticate the user
+		○ the service is called osxkeychain
+		○ 
+		○ it helps in verifying the identity of the user to github
+		○ now In linux key chain access is not present so there is some thing else in place ofc
+	• in linux
+		○ when first time setting it up it asks for password
+		○ but as of right now the password has been disabled for authentication as git hub sees them as less secure
+		○ so there are other methods in place for this authentication to happen
+		○ one of the things I used when setting up was used git config command
+		○ 
+		○ Then when I tried to push it it stopped me saying this
+		○ .
+		○ 
+		○ now what I could have used many thing such ssh,PAT etc but I used (PAT) Personal access tokens
+		○ for setting this up
+			§ go to github
+			§ go to settings
+			§ go to developer settings
+			§ go to PAT
+			§ click on generate new token
+				□ enter the name of the tokens and permission u wanna give
+				□ then create the token 
+				□ copy the token as you will only be able to do it once
+				□ now
+		○ instead of password when it. ask for password now just give it the PAT
+		○ now its almost done just so it doesn't ask you every time u push/pull 
+		○ 
+		○ use this command and it will save it 
+			§ git config --global credential.helper cache
+		○ if u wanna unset it
+		○ 
+	• windows
+		○ After installing git bash you can just go ahead 
+		○ and run the commands usual like in linux 
+		○ using PAT you should be able to push the things 
