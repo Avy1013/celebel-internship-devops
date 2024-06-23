@@ -1,0 +1,37 @@
+apiVersion: '2023-05-01'
+location: eastus
+name: avy3
+properties:
+  containers:
+  - name: avy1
+    properties:
+      image: docker.io/avy1013/first:v1.0
+      resources:
+        requests:
+          cpu: 1
+          memoryInGb: 1.5
+      ports:
+      - port: 80
+      - port: 8080
+  - name: nginx
+    properties:
+      image: nginx:latest
+      command: ["/bin/sh", "-c", "echo 'server { listen 5001; location / { root /usr/share/nginx/html; } }' > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+      resources:
+        requests:
+          cpu: 1
+          memoryInGb: 1.5
+      ports:
+      - port: 5001
+      - port: 8082
+  osType: Linux
+  ipAddress:
+    type: Public
+    ports:
+    - protocol: tcp
+      port: 80
+    - protocol: tcp
+      port: 5001
+    - protocol: tcp
+      port: 8082 # Added this port
+type: Microsoft.ContainerInstance/containerGroups
