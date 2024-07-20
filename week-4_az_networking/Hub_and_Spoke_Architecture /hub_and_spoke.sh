@@ -202,4 +202,4 @@ create_bidirectional_peering $managementVnet $developingVnet
 
 # Enable IP forwarding for the Management VM's NIC
 managementVmNic=$(az vm show -g $resourcegroup -n ManagementVM --query 'networkProfile.networkInterfaces[0].id' -o tsv)
-az network nic update --name ${managementVmNic##*/} --resource-group $resourcegroup --ip-forwarding true --output tables
+az network nic update --name ${managementVmNic##*/} --resource-group $resourcegroup --ip-forwarding true --output table
