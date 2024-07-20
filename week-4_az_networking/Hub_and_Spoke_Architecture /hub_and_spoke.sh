@@ -123,13 +123,60 @@ az vm create \
   --public-ip-address "" \
   --output table
 
+# Function to add ICMP rules to an NSG
+add_icmp_rules() {
+  local vm_name=$1
+  local resource_group=$2
+
+  # Retrieve NSG name for the VM
+  local nsg_name="$1NSG"
+
+  # Allow ICMP inbound traffic
+  az network nsg rule create \
+    --resource-group "$resource_group" \
+    --nsg-name "$nsg_name" \
+    --name AllowICMPIn \
+    --protocol Icmp \
+    --direction Inbound \
+    --priority 100 \
+    --source-address-prefixes '*' \
+    --source-port-ranges '*' \
+    --destination-address-prefixes '*' \
+    --destination-port-ranges '*' \
+    --access Allow \
+    --output table
+
+  # Allow ICMP outbound traffic
+  az network nsg rule create \
+    --resource-group "$resource_group" \
+    --nsg-name "$nsg_name" \
+    --name AllowICMPOut \
+    --protocol Icmp \
+    --direction Outbound \
+    --priority 100 \
+    --source-address-prefixes '*' \
+    --source-port-ranges '*' \
+    --destination-address-prefixes '*' \
+    --destination-port-ranges '*' \
+    --access Allow \
+    --output table
+}
+
+# Add ICMP rules to the Management and Production NSGs
+
+add_icmp_rules "ManagementVM"  "$resourcegroup"
+add_icmp_rules "ProductionVM" "$resourcegroup"
+
+add_icmp_rules "DevelopingVM" $resourcegroup
+add_icmp_rules "TestingVM" $resourcegroup
+
 # Creating vpc peering
+
 create_bidirectional_peering() {
   local hubVnet=$1
   local spokeVnet=$2
   local peeringHubToSpoke="${hubVnet}To${spokeVnet##*-}"
   local peeringSpokeToHub="${spokeVnet##*-}To${hubVnet}"
-
   az network vnet peering create \
     --resource-group $resourcegroup \
     --name $peeringHubToSpoke \
@@ -138,7 +185,6 @@ create_bidirectional_peering() {
     --allow-vnet-access \
     --allow-forwarded-traffic \
     --output table
-
   az network vnet peering create \
     --resource-group $resourcegroup \
     --name $peeringSpokeToHub \
@@ -156,4 +202,4 @@ create_bidirectional_peering $managementVnet $developingVnet
 
 # Enable IP forwarding for the Management VM's NIC
 managementVmNic=$(az vm show -g $resourcegroup -n ManagementVM --query 'networkProfile.networkInterfaces[0].id' -o tsv)
-az network nic update --name ${managementVmNic##*/} --resource-group $resourcegroup --ip-forwarding true
+az network nic update --name ${managementVmNic##*/} --resource-group $resourcegroup --ip-forwarding true --output tables
